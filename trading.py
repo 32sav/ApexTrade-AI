@@ -1,0 +1,24 @@
+from typing import Literal
+
+from pydantic import BaseModel, Field
+
+
+class Order(BaseModel):
+    symbol: str = Field(..., min_length=1, max_length=10)
+    side: Literal["buy", "sell"]
+    quantity: int = Field(..., gt=0)
+    price: float = Field(..., gt=0)
+
+
+def calculate_order_value(order: Order) -> float:
+    return order.quantity * order.price
+class InsufficientFundsError(Exception):
+    pass
+
+
+def check_affordability(order: Order, cash_balance: float) -> None:
+    cost = calculate_order_value(order)
+    if cost > cash_balance:
+        raise InsufficientFundsError(
+            f"Insufficient funds: order costs {cost:.2f}, balance is {cash_balance:.2f}"
+        )
