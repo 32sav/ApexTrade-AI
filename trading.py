@@ -28,3 +28,21 @@ def apply_order(order: Order, cash_balance: float) -> float:
         check_affordability(order, cash_balance)
         return cash_balance - cost
     return cash_balance + cost
+class Portfolio:
+    def __init__(self, cash: float):
+        self.cash = cash
+        self.positions: dict[str, int] = {}
+
+    def apply_order(self, order: Order) -> None:
+        held = self.positions.get(order.symbol, 0)
+
+        if order.side == "buy":
+            self.cash = apply_order(order, self.cash)
+            self.positions[order.symbol] = held + order.quantity
+        else:
+            if order.quantity > held:
+                raise ValueError(
+                    f"Cannot sell {order.quantity} {order.symbol}: only {held} held"
+                )
+            self.cash = apply_order(order, self.cash)
+            self.positions[order.symbol] = held - order.quantity

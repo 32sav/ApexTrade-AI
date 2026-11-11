@@ -67,3 +67,26 @@ def test_sell_increases_balance():
 def test_buy_with_insufficient_funds_raises():
     with pytest.raises(InsufficientFundsError):
         apply_order(ORDER, 1000)
+from trading import Portfolio
+
+
+def test_portfolio_buy_updates_cash_and_positions():
+    p = Portfolio(cash=2000)
+    p.apply_order(ORDER)
+    assert p.cash == 495.0
+    assert p.positions == {"AAPL": 10}
+
+
+def test_portfolio_sell_reduces_position():
+    p = Portfolio(cash=2000)
+    p.apply_order(ORDER)
+    p.apply_order(Order(symbol="AAPL", side="sell", quantity=4, price=150.5))
+    assert p.positions == {"AAPL": 6}
+    assert p.cash == 495.0 + 4 * 150.5
+
+
+def test_portfolio_oversell_rejected():
+    p = Portfolio(cash=2000)
+    p.apply_order(ORDER)
+    with pytest.raises(ValueError):
+        p.apply_order(Order(symbol="AAPL", side="sell", quantity=11, price=150.5))
