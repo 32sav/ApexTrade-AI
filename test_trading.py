@@ -52,3 +52,18 @@ def test_endpoint_insufficient_funds():
     )
     assert response.status_code == 400
     assert "Insufficient funds" in response.json()["detail"]
+from trading import apply_order
+
+
+def test_buy_reduces_balance():
+    assert apply_order(ORDER, 2000) == 495.0
+
+
+def test_sell_increases_balance():
+    sell = Order(symbol="AAPL", side="sell", quantity=10, price=150.5)
+    assert apply_order(sell, 2000) == 3505.0
+
+
+def test_buy_with_insufficient_funds_raises():
+    with pytest.raises(InsufficientFundsError):
+        apply_order(ORDER, 1000)

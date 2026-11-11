@@ -22,3 +22,9 @@ def check_affordability(order: Order, cash_balance: float) -> None:
         raise InsufficientFundsError(
             f"Insufficient funds: order costs {cost:.2f}, balance is {cash_balance:.2f}"
         )
+def apply_order(order: Order, cash_balance: float) -> float:
+    cost = calculate_order_value(order)
+    if order.side == "buy":
+        check_affordability(order, cash_balance)
+        return cash_balance - cost
+    return cash_balance + cost
