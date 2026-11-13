@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ApexTrade AI</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <h1>ApexTrade AI</h1>
+    <p>
+      Create a portfolio, place buy or sell orders, and track your positions.
+    </p>
+
+    <section>
+      <h2>1. Create a portfolio</h2>
+      <label for="startCash">Starting cash</label>
+      <input id="startCash" type="number" min="0" step="0.01" value="2000" />
+      <button id="createBtn">Create portfolio</button>
+    </section>
+
+    <section>
+      <h2>2. Load a portfolio</h2>
+      <label for="portfolioId">Portfolio ID</label>
+      <input id="portfolioId" type="number" min="1" />
+      <button id="loadBtn">Load</button>
+    </section>
+
+    <section>
+      <h2>3. Place an order</h2>
+      <label for="symbol">Symbol</label>
+      <input id="symbol" type="text" maxlength="10" value="AAPL" />
+      <label for="side">Side</label>
+      <select id="side">
+        <option value="buy">Buy</option>
+        <option value="sell">Sell</option>
+      </select>
+      <label for="quantity">Quantity</label>
+      <input id="quantity" type="number" min="1" step="1" value="10" />
+      <label for="price">Price</label>
+      <input id="price" type="number" min="0.01" step="0.01" value="150.5" />
+      <button id="orderBtn">Place order</button>
+    </section>
+
+    <section>
+      <h2>Current state</h2>
+      <div id="state">No portfolio loaded.</div>
+      <div id="message"></div>
+    </section>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
